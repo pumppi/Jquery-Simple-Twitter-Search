@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr" id="html">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>jQuery Test Suite</title>
+	<link rel="Stylesheet" media="screen" href="../qunit.css" />
+	<script type="text/javascript" src="../../show.js"></script>
+	<script type="text/javascript" src="../../dist/twitter.js"></script>
+	<script type="text/javascript" src="../qunit.js"></script>
+</head>
+<body id="body">
+	<h3>Test for Search Twitter</h3>
+
+	<h1 id="qunit-header">QUnit example</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+	
+	
+	<style type="text/css" media="screen">
+		.tweetContainer{
+			background-color:#2EA7CB;
+			margin:0px 10px;
+			font-family:verdana;
+			font-size:12px;
+			-webkit-box-shadow: 1px 1px 1px #ccc;
+			   -moz-box-shadow: 1px 1px 1px #ccc;
+			     -o-box-shadow: 1px 1px 1px #ccc;
+			        box-shadow: 1px 1px 1px #ccc;
+			-webkit-border-radius: 10px;
+			   -moz-border-radius: 10px;
+			        border-radius: 10px;
+		}
+		.tweetContainer .header{
+			height:60px;
+		}
+		.tweetContainer img{
+			border:3px solid #fff;
+			float:left;
+		}
+		.tweetContainer .username{
+			padding-top:20px;
+			padding-left:12px;
+			font-weight:bold;
+			float:left;
+		}
+	</style>
+	<div id="twitterFeed" style="width:980px;height:200px;overflow:hidden;position:relative;padding-top:65px;"></div>
+	<script>
+	
+	$(document).ready(function(){
+		$('#twitterFeed').searchTwitter('twitter');
+	});
+	
+	</script>
+</body>
+</html>

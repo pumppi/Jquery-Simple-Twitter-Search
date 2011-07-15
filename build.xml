@@ -1,0 +1,81 @@
+<project name="twitterSearch" default="all" basedir=".">
+
+	<property name="version" value="0.1" />
+	<property name="PREFIX" value="." />
+	<property name="PROJECT_NAME" value="Twitter Search" />
+	
+	<property description="Dist Folder" name="dist" value="${PREFIX}/dist" />
+	<property name="BUILD" value="${dist}/twitter.js" />
+	<property name="BUILD_MIN" value="${dist}/build.min.js" />
+
+	<target name="all" depends="init, build" />
+	<target name="init" depends="" >
+		<mkdir dir="${dist}" />
+	</target>
+	
+	
+
+
+	<target name="build" depends="init" description="Build for ${PROJECT_NAME}">
+		<echo message="Building ${BUILD}" />	
+		<concat destfile="${BUILD}">
+			<fileset file="src/jquery/jquery.js" />
+			<fileset file="src/twitter/search.twitter.js" />
+		</concat>	
+		<replaceregexp match="@VERSION" replace="${version}" flags="g" byline="true" file="${BUILD}" />
+		<echo message="${BUILD} built." />
+	</target>
+
+	<target name="lint" depends="build" description="Check ${PROJECT_NAME} against JSLint">
+		<exec executable="java">
+			<arg line="-jar build/js.jar build/jslint-check.js" />
+		</exec>
+	</target>
+
+	<target name="min" depends="build" description="Remove all comments and whitespace, no compression, great in combination with GZip">
+		<echo message="Building ${BUILD_MIN}" />
+		<apply executable="java" parallel="false" verbose="true" dest="${dist}">
+			<fileset>
+				<include name="${BUILD}" />
+			</fileset>
+			<arg line="-jar" />
+			<arg path="build/google-compiler-20100917.jar" />
+			<arg value="--warning_level" />
+			<arg value="QUIET" />
+			<arg value="--js_output_file" />
+			<targetfile />
+			<arg value="--js" />
+			<mapper type="glob" from="build.js" to="tmpmin" />
+		</apply>
+		<concat destfile="${BUILD_MIN}">
+			<filelist files="${BUILD}, ${dist}/tmpmin" />
+			<filterchain>
+				<headfilter lines="15" />
+			</filterchain>
+		</concat>
+		<concat destfile="${BUILD_MIN}" append="yes">
+			<filelist files="${dist}/tmpmin" />
+		</concat>
+		<delete file="${dist}/tmpmin" />
+		<echo message="${BUILD_MIN} built." />
+	</target>
+	
+
+	<target name="cpd">
+		<echo message="Making DRY Analysis" />
+		<mkdir dir="${dist}" />
+		<path id="PMD.lib">  <fileset dir="${basedir}/build">  <include name="*.jar" />  </fileset> </path>
+	    <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" ><classpath refid="PMD.lib" /></taskdef>
+	    <cpd minimumTokenCount="100" outputFile="${dist}/cpd.xml" language="php" format="xml">
+	  	  <fileset dir="${basedir}/src">
+		   <include name="*.*"/>
+		  </fileset>
+	    </cpd>
+	</target>
+
+	<target name="clean">
+		<delete dir="${dist}" />
+	</target>
+
+
+</project>
